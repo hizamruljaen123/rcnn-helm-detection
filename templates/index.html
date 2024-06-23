@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+        <title>Hello, world!</title>
+    </head>
+        <style>
+    /* Sidebar Styles */
+.sidebar {
+    background: linear-gradient(to top, #004e92,  #000428); /* Gradient background from blue to black */
+    color: #fff;
+    min-height: 100vh;
+}
+
+.sidebar .nav-link {
+    color: #f8f9fa;
+    font-weight: 500;
+    padding: 15px;
+    transition: all 0.3s ease; /* Smooth transition for hover effect */
+    font-size: 12px !important;
+}
+
+.sidebar .nav-link:hover {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.1);
+    margin-left: 10px; /* Shift text to the right on hover */
+    border-radius: 5px; /* Rounded corners on hover */
+
+}
+
+.sidebar .nav-link .fa { /* Styling for Font Awesome icons */
+    margin-right: 10px;
+}
+@media (max-width: 768px) {
+    .sidebar {
+        min-height: auto;
+    }
+
+    .sidebar .nav-link:hover {
+        margin-left: 0; /* Disable shift effect on smaller screens */
+    }
+}
+/* Table Styles */
+table {
+   font-size: 0.9em;
+   border-collapse: collapse;
+}
+table,
+th,
+td {
+   border: 1px solid #dee2e6;
+}
+thead th {
+   background-color: #6c757d; /* Dark grey background */
+   color: #ffffff; /* White text */
+   padding: 10px;
+}
+tbody td {
+   padding: 10px;
+}
+/* Image Layout Styles */
+.image-container {
+   display: flex;
+   justify-content: center; /* Center the image horizontally */
+   align-items: center; /* Center the image vertically */
+   margin-top: 20px;
+}
+.image-container img {
+   max-width: 100%;
+   height: auto;
+   border: 4px solid #007bff; /* Blue border */
+   box-shadow: 0 8px 15px 0 rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
+}
+/* Additional Responsive Adjustments */
+@media (max-width: 768px) {
+   .sidebar {
+      min-height: auto; /* Adjust height for smaller screens */
+   }
+}
+
+    </style>
+    <body>
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- Sidebar -->
+                    {% include 'sidebar.html' %}
+                    <!-- Main Content -->
+                    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+                        <h4>Realtime Image Helmet Detection</h4>
+                        <hr>
+                        <div class="row">
+                            
+                                <div class="col-md-12">
+                                    <div class="card" style="height: 360px;">
+                                        <div class="card-body">
+                                                
+                                                <!-- Tempat untuk menampilkan hasil -->
+                                                <center>
+                                                    <div id="result">
+                                                    <center>
+                                                    <h4>Hasil Deteksi Disini</h4>
+                                                </center>
+                                                </div>
+                                                </center>
+                                                
+                                            
+                                        </div>
+                                    </div>
+                                    <br>
+                                <br>
+                                </div>
+
+                            <div class="col-md-12">
+                                <form action="/upload" method="post" enctype="multipart/form-data" class="mb-3">
+                                    <div class="form-group">
+                                        <input type="file" name="file" class="form-control">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Upload and Analyze</button>
+                                </form>
+                                <br>
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Total Detections</th>
+                                            <th>Helmet Count</th>
+                                            <th>No Helmet Count</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="resultTable">
+                                        <!-- Data tabel akan diisi oleh JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </main>
+            </div>
+            </div>
+        <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.querySelector('form');
+            const resultDiv = document.getElementById('result');
+            const resultTable = document.getElementById('resultTable'); // Elemen tabel untuk menampilkan data
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                let formData = new FormData(form);
+
+                fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json()) // Mengubah respons menjadi JSON
+                .then(data => {
+                    // Menampilkan gambar yang diunggah dan hasil deteksi
+                    let uploadedImageUrl = `/${data.uploaded_image_path}`;
+                    let detectedImageUrl = `/${data.detected_image_path}`;
+                    resultDiv.innerHTML = `
+                    <div class="row">
+                        <div class="col-md-6">
+                            <strong>Uploaded Image:</strong><br>
+                            <img style="height:290px;" src="${uploadedImageUrl}" alt="Uploaded Image" class="img-fluid">
+                        </div>
+                        <div class="col-md-6">
+                            <strong>Detection Result:</strong><br>
+                            <img style="height:290px;" src="${detectedImageUrl}" alt="Detection Result" class="img-fluid">
+                        </div>
+                    </div>
+
+                    `;
+
+                    // Menampilkan data di tabel
+                    if(resultTable) {
+                        let tableRow = `<tr>
+                            <td>${data.total_detections}</td>
+                            <td>${data.helmet_count}</td>
+                            <td>${data.no_helmet_count}</td>
+                        </tr>`;
+                        resultTable.innerHTML = tableRow;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    resultDiv.innerHTML = `<p>Error while processing image.</p>`;
+                });
+            });
+        });
+        </script>
+
+
+    </body>
+</html>

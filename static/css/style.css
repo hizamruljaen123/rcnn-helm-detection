@@ -1,0 +1,70 @@
+/* Sidebar Styles */
+.sidebar {
+    background: linear-gradient(to right, #000428, #004e92); /* Gradient background from blue to black */
+    color: #fff;
+    min-height: 100vh;
+}
+
+.sidebar .nav-link {
+    color: #f8f9fa;
+    font-weight: 500;
+    padding: 15px;
+    transition: all 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.sidebar .nav-link:hover {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.1);
+    margin-left: 10px; /* Shift text to the right on hover */
+    border-radius: 5px; /* Rounded corners on hover */
+}
+
+.sidebar .nav-link .fa { /* Styling for Font Awesome icons */
+    margin-right: 10px;
+}
+@media (max-width: 768px) {
+    .sidebar {
+        min-height: auto;
+    }
+
+    .sidebar .nav-link:hover {
+        margin-left: 0; /* Disable shift effect on smaller screens */
+    }
+}
+/* Table Styles */
+table {
+   font-size: 0.9em;
+   border-collapse: collapse;
+}
+table,
+th,
+td {
+   border: 1px solid #dee2e6;
+}
+thead th {
+   background-color: #6c757d; /* Dark grey background */
+   color: #ffffff; /* White text */
+   padding: 10px;
+}
+tbody td {
+   padding: 10px;
+}
+/* Image Layout Styles */
+.image-container {
+   display: flex;
+   justify-content: center; /* Center the image horizontally */
+   align-items: center; /* Center the image vertically */
+   margin-top: 20px;
+}
+.image-container img {
+   max-width: 100%;
+   height: auto;
+   border: 4px solid #007bff; /* Blue border */
+   box-shadow: 0 8px 15px 0 rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
+}
+/* Additional Responsive Adjustments */
+@media (max-width: 768px) {
+   .sidebar {
+      min-height: auto; /* Adjust height for smaller screens */
+   }
+}

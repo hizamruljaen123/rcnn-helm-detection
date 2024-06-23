@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+        <title>Hello, world!</title>
+    </head>
+    <style>
+    /* Sidebar Styles */
+.sidebar {
+    background: linear-gradient(to top, #004e92,  #000428); /* Gradient background from blue to black */
+    color: #fff;
+    min-height: 100vh;
+}
+
+.sidebar .nav-link {
+    color: #f8f9fa;
+    font-weight: 500;
+    padding: 15px;
+    transition: all 0.3s ease; /* Smooth transition for hover effect */
+    font-size: 12px !important;
+}
+
+.sidebar .nav-link:hover {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.1);
+    margin-left: 10px; /* Shift text to the right on hover */
+    border-radius: 5px; /* Rounded corners on hover */
+
+}
+
+.sidebar .nav-link .fa { /* Styling for Font Awesome icons */
+    margin-right: 10px;
+}
+@media (max-width: 768px) {
+    .sidebar {
+        min-height: auto;
+    }
+
+    .sidebar .nav-link:hover {
+        margin-left: 0; /* Disable shift effect on smaller screens */
+    }
+}
+/* Table Styles */
+table {
+   font-size: 0.9em;
+   border-collapse: collapse;
+   width: 100%;
+}
+table,
+th,
+td {
+   border: 1px solid #dee2e6;
+}
+thead th {
+   background-color: #6c757d; /* Dark grey background */
+   color: #ffffff; /* White text */
+   padding: 10px;
+}
+tbody td {
+   padding: 10px;
+}
+/* Image Layout Styles */
+.image-container {
+   display: flex;
+   justify-content: center; /* Center the image horizontally */
+   align-items: center; /* Center the image vertically */
+   margin-top: 20px;
+}
+.image-container img {
+   max-width: 100%;
+   height: auto;
+   border: 4px solid #007bff; /* Blue border */
+   box-shadow: 0 8px 15px 0 rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
+}
+/* Additional Responsive Adjustments */
+@media (max-width: 768px) {
+   .sidebar {
+      min-height: auto; /* Adjust height for smaller screens */
+   }
+}
+
+    </style>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            {% include 'sidebar.html' %}
+            <!-- Main Content -->
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+                <h5>Detection Result</h5>
+                <hr>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Uploaded Image</th>
+                            <th>Detected Image</th>
+                            <th>Helmet Count</th>
+                            <th>No Helmet Count</th>
+                            <th>Date Detection</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in detection_data %}
+                            <tr onclick="showImageComparisonModal('{{ item.uploaded_image_path.replace('\\', '\\\\') }}', '{{ item.detected_image_path.replace('\\', '\\\\') }}')">
+                                <td>{{ item.id_data }}</td>
+                                <td>
+                                    <img width="100px" src="{{ item.uploaded_image_path }}" alt="Uploaded Image">
+                                </td>
+                                <td>
+                                    <img width="100px" src="{{ item.detected_image_path }}" alt="Detected Image">
+                                </td>
+                                <td>{{ item.helmet_count }}</td>
+                                <td>{{ item.no_helmet_count }}</td>
+                                <td>{{ item.date_detection }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+            </main>
+        </div>
+    </div>
+    <!-- Scripts... -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js" integrity="sha512-+k1pnlgt4F1H8L7t3z95o3/KO+o78INEcXTbnoJQ/F2VqDVhWoaiVml/OEHv9HsVgxUaVW+IbiZPUJQfF/YxZw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+
+    <script>
+    // Fungsi untuk menampilkan kedua gambar dalam modal
+    function showImageComparisonModal(uploadedImagePath, detectedImagePath) {
+        var modal = document.getElementById('imageComparisonModal');
+        var uploadedImage = document.getElementById('uploadedImage');
+        var detectedImage = document.getElementById('detectedImage');
+
+        // Set source gambar sesuai dengan uploadedImagePath dan detectedImagePath
+        uploadedImage.src = uploadedImagePath;
+        detectedImage.src = detectedImagePath;
+
+        // Tampilkan modal
+        $(modal).modal('show');
+    }
+    </script>
+    <!-- Tambahkan modal untuk menampilkan kedua gambar -->
+<div class="modal fade" id="imageComparisonModal" tabindex="-1" role="dialog" aria-labelledby="imageComparisonModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageComparisonModalLabel">Image Comparison</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Uploaded Image</h6>
+                            <img id="uploadedImage" src="" alt="Uploaded Image" style="width: 100%;">
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Detected Image</h6>
+                            <img id="detectedImage" src="" alt="Detected Image" style="width: 100%;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
