@@ -1,0 +1,5 @@
+Hidupkan Xampp
+jalankan melalui Anaconda Prompt
+D:
+cd D:\aplikasi_helm
+python main.py

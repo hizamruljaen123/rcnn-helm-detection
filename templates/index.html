@@ -143,56 +143,56 @@ tbody td {
             </div>
             </div>
         <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const form = document.querySelector('form');
-            const resultDiv = document.getElementById('result');
-            const resultTable = document.getElementById('resultTable'); // Elemen tabel untuk menampilkan data
+document.addEventListener("DOMContentLoaded", function() {
+    const form = document.querySelector('form');
+    const resultDiv = document.getElementById('result');
+    const resultTable = document.getElementById('resultTable'); // Elemen tabel untuk menampilkan data
 
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
 
-                let formData = new FormData(form);
+        let formData = new FormData(form);
 
-                fetch('/upload', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json()) // Mengubah respons menjadi JSON
-                .then(data => {
-                    // Menampilkan gambar yang diunggah dan hasil deteksi
-                    let uploadedImageUrl = `/${data.uploaded_image_path}`;
-                    let detectedImageUrl = `/${data.detected_image_path}`;
-                    resultDiv.innerHTML = `
-                    <div class="row">
-                        <div class="col-md-6">
-                            <strong>Uploaded Image:</strong><br>
-                            <img style="height:290px;" src="${uploadedImageUrl}" alt="Uploaded Image" class="img-fluid">
-                        </div>
-                        <div class="col-md-6">
-                            <strong>Detection Result:</strong><br>
-                            <img style="height:290px;" src="${detectedImageUrl}" alt="Detection Result" class="img-fluid">
-                        </div>
-                    </div>
+        fetch('/upload', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json()) // Mengubah respons menjadi JSON
+        .then(data => {
+            // Menampilkan gambar yang diunggah dan hasil deteksi
+            let uploadedImageUrl = `/${data.uploaded_image_path}`;
+            let detectedImageUrl = `/${data.detected_image_path}`;
+            resultDiv.innerHTML = `
+            <div class="row">
+                <div class="col-md-6">
+                    <strong>Uploaded Image:</strong><br>
+                    <img style="height:290px;" src="${uploadedImageUrl}" alt="Uploaded Image" class="img-fluid">
+                </div>
+                <div class="col-md-6">
+                    <strong>Detection Result:</strong><br>
+                    <img style="height:290px;" src="${detectedImageUrl}" alt="Detection Result" class="img-fluid">
+                </div>
+            </div>
 
-                    `;
+            `;
 
-                    // Menampilkan data di tabel
-                    if(resultTable) {
-                        let tableRow = `<tr>
-                            <td>${data.total_detections}</td>
-                            <td>${data.helmet_count}</td>
-                            <td>${data.no_helmet_count}</td>
-                        </tr>`;
-                        resultTable.innerHTML = tableRow;
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    resultDiv.innerHTML = `<p>Error while processing image.</p>`;
-                });
-            });
+            // Menampilkan data di tabel
+            if(resultTable) {
+                let tableRow = `<tr>
+                    <td>${data.total_detections}</td>
+                    <td>${data.helmet_count}</td>
+                    <td>${data.no_helmet_count}</td>
+                </tr>`;
+                resultTable.innerHTML = tableRow;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            resultDiv.innerHTML = `<p>Error while processing image.</p>`;
         });
-        </script>
+    });
+});
+</script>
 
 
     </body>
